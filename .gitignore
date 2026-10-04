@@ -5,3 +5,4 @@ iso-build/binary
 iso-build/*.iso
 iso-build/*.tar
 iso-build/*.log
+.kilo

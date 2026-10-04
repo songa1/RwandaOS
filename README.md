@@ -100,6 +100,22 @@ Requires Pillow, ImageMagick, and rsvg-convert.
 
 ---
 
+## Open Source
+
+RwandaOS is released under the **GNU GPL v3** (see `LICENSE`).
+
+- Contributing: `CONTRIBUTING.md`
+- Code of Conduct: `CODE_OF_CONDUCT.md`
+- Security policy: `SECURITY.md`
+- Changelog: `CHANGELOG.md`
+- Asset licensing: `branding/LICENSE.md` (fonts: see `fonts/OFL.txt`)
+
+We welcome issues, PRs, and reproductions. To get started, fork the repo,
+follow the build steps in [Quick Start](#quick-start), and open a pull request
+with a clear description and reproduction steps.
+
+---
+
 ## Known Limitations
 
 - **Sounds are skipped** for now (stock PipeWire/PulseAudio).
