@@ -3,6 +3,50 @@ RwandaOS – Group Meeting Report
 Custom Debian-based Linux Distribution
 Technical Planning and Team Action Plan
 
+## Implementation Status (current)
+
+Base: Debian 13 (trixie), GNOME 48, x86_64
+
+### What is branded / configured
+
+- ISO metadata: `LB_ISO_APPLICATION`, publisher, volume, hostname
+- Boot parameters: `boot=live components quiet splash hostname=rwandaos username=rwanda`
+- Plymouth boot splash: custom `rwandaos` script theme (logo + progress bar)
+- Bootloader splash screens: isolinux `splash.png` (640×480) + GRUB `splash.png` (800×600)
+- GDM login: Rwandan wallpaper, logo, "RwandaOS" banner, dark colour scheme
+- Desktop: dark mode by default, Google Sans UI font, RwandaOS icon theme (Adwaita-inherit)
+- Accent colour: Rwanda Blue (#00A1DE) via gsettings override + GTK4 accent override in /etc/skel
+- Wallpapers: selectable in Settings (RwandaOS Dream, RwandaOS Wildlife); dark uses Wildlife
+- OS identity: `/usr/lib/os-release` renamed to RwandaOS, `/etc/issue`, hostname `rwandaos`
+- Live session: live-config user "rwanda", hostname rwandaos, autologin
+
+### Build
+
+```sh
+sudo ./scripts/setup-build-host.sh   # installs live-build, debootstrap, etc.
+./scripts/build-iso.sh               # cleans, configs, builds the ISO
+```
+
+Output: `iso-build/live-image-amd64.hybrid.iso` (name may be `rwandaos-amd64.hybrid.iso` depending on live-build version).
+
+### Repo layout
+
+```
+branding/      logo, wallpapers, fonts, colors.md
+docs/          design notes
+fonts/         Google Sans TTFs (canonical copy)
+iso-build/     live-build configuration (config/) + hooks + package lists
+packages/      rwandaos-identity Debian package source (gschema override)
+scripts/       generate-assets.sh, build-iso.sh, setup-build-host.sh
+```
+
+### Notes / known limitations
+
+- Sounds and audio branding are intentionally skipped for now (stock PipeWire/PulseAudio).
+- Google Sans is the UI font; the system still ships DejaVu as fallback.
+- The `rwandaos-identity` package is not yet wired into the ISO build; the gschema override is duplicated into `iso-build/config/includes.chroot_after_packages/usr/share/glib-2.0/schemas/` on purpose so `dconf update` + `glib-compile-schemas` pick it up during `lb build`.
+- GTK4 accent override lives in `/etc/skel/.config/gtk-4.0/gtk.css`; libadwaita apps pick it up in the live session.
+
 1. Project Overview
    RwandaOS is a proposed customized Linux distribution designed around the needs of students. The team agreed to use Debian as the underlying operating system and GNOME as the initial desktop environment. The project will combine the stability and flexibility of Debian with a distinct Rwandan identity, including custom branding, colors, sounds, wallpapers, animations, and student-focused software.
 2. Initial Project Vision

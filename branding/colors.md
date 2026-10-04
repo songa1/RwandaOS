@@ -1,19 +1,19 @@
 # RwandaOS Color System
 
 Primary:
-Rwanda Blue
+Rwanda Blue #00A1DE
 
 Secondary:
-Rwanda Yellow
+Rwanda Yellow #FCD116
 
 Accent:
-Rwanda Green
+Rwanda Green #00A01D
 
 Background:
-Dark neutral
+Dark neutral #0F1B34
 
 Surface:
-Light neutral
+Light neutral #F0F0F0
 
 Text:
 High contrast white/dark

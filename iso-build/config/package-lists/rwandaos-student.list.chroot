@@ -1,4 +1,4 @@
-firefox
+firefox-esr
 libreoffice
 evince
 git
@@ -6,7 +6,7 @@ python3
 build-essential
 gnome-calculator
 gnome-text-editor
-gnome-screnshot
+gnome-screenshot
 file-roller
 nodejs
 npm

@@ -1,0 +1,7 @@
+/* RwandaOS GTK3 minimal */
+@define-color accent_color #00A1DE;
+@define-color accent_bg_color #00A1DE;
+
+* {
+  -GtkWidget-tooltip-background-color: #0f1b34;
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
+<wallpapers>
+  <wallpaper deleted="false">
+    <name>RwandaOS Dream</name>
+    <filename>/usr/share/backgrounds/rwandaos/dream.png</filename>
+    <filename-dark>/usr/share/backgrounds/rwandaos/wildlife.png</filename-dark>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#1a1a1a</pcolor>
+    <scolor>#00A1DE</scolor>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>RwandaOS Wildlife</name>
+    <filename>/usr/share/backgrounds/rwandaos/wildlife.png</filename>
+    <filename-dark>/usr/share/backgrounds/rwandaos/dream.png</filename-dark>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#0a2327</pcolor>
+    <scolor>#00A1DE</scolor>
+  </wallpaper>
+</wallpapers>

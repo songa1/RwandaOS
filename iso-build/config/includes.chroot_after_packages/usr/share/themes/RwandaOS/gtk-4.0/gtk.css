@@ -1,0 +1,9 @@
+/* RwandaOS GTK4 accent */
+@define-color accent_bg_color #00A1DE;
+@define-color accent_fg_color #ffffff;
+
+:root {
+  --accent-bg-color: #00A1DE;
+  --accent-fg-color: #ffffff;
+  --accent-color: #4A90E2;
+}

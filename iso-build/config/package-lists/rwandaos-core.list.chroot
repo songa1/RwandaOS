@@ -1,5 +1,9 @@
 gnome-shell
 gnome-control-center
+gnome-shell-extension-user-theme
 dconf-cli
 dconf-gsettings-backend
 fontconfig
+plymouth
+gdm3
+xdg-user-dirs

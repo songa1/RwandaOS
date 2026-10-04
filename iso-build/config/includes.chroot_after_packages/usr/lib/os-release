@@ -1,0 +1,11 @@
+PRETTY_NAME="RwandaOS 13 (trixie)"
+NAME="RwandaOS"
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
+ID=rwandaos
+ID_LIKE=debian
+HOME_URL="https://rwandaos.org/"
+SUPPORT_URL="https://rwandaos.org/support"
+BUG_REPORT_URL="https://rwandaos.org/bugs"
+IMAGE_ID=live

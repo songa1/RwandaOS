@@ -1,0 +1,21 @@
+[org/gnome/login-screen]
+banner-message-enable=true
+banner-message-text='RwandaOS'
+banner-message-source='settings'
+disable-restart-buttons=false
+logo='/usr/share/pixmaps/rwandaos/RwandaOS.png'
+
+[org/gnome/desktop/background]
+picture-uri='file:///usr/share/backgrounds/rwandaos/dream.png'
+picture-uri-dark='file:///usr/share/backgrounds/rwandaos/wildlife.png'
+picture-options='zoom'
+primary-color='#00A1DE'
+secondary-color='#0b1b34'
+
+[org/gnome/desktop/interface]
+color-scheme='prefer-dark'
+accent-color='blue'
+font-name='Google Sans 11'
+
+[org/gnome/desktop/a11y]
+always-show-universal-access-status=false

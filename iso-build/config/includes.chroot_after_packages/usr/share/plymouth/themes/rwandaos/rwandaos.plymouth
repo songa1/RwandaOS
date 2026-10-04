@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=RwandaOS
+Description=RwandaOS boot splash
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/rwandaos
+ScriptFile=/usr/share/plymouth/themes/rwandaos/rwandaos.script

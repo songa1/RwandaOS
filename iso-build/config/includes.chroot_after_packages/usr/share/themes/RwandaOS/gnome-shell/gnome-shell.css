@@ -1,0 +1,36 @@
+/* RwandaOS shell theme — appended after Adwaita */
+@define-color rwanda_primary #00A1DE;
+@define-color rwanda_accent #FCD116;
+@define-color rwanda_dark #0f1b34;
+
+#panel {
+  background-color: rgba(15, 27, 52, 0.85);
+}
+
+#panel .panel-button:hover, #panel .panel-button:focus {
+  background-color: rgba(0, 161, 222, 0.35);
+}
+
+#panel .panel-button:active, #panel .panel-button:checked {
+  background-color: rgba(0, 161, 222, 0.55);
+}
+
+.quick-settings .quick-settings-panel {
+  background-color: rgba(15, 27, 52, 0.95);
+}
+
+.quick-settings .widget-toggle-button:checked {
+  background-color: #00A1DE;
+}
+
+.overview .workspace-thumbnail-to-add {
+  background-color: rgba(0, 161, 222, 0.25);
+}
+
+.modal-dialog {
+  border-radius: 12px;
+}
+
+.message-dialog .dialog-button {
+  border-radius: 999px;
+}
