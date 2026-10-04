@@ -1,0 +1,7 @@
+Package: rwandaos-identity
+Version: 0.1.0
+Section: x11
+Priority: optional
+Architecture: all
+Maintainer: RwandaOS Team <achille@techinika.com>
+Description: Visual identity, wallpapers, and default settings for RwandaOS.

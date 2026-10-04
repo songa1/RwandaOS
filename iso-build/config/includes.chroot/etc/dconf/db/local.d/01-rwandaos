@@ -1,0 +1,4 @@
+[org/gnome/desktop/background]
+picture-uri='file:///usr/share/backgrounds/rwandaos/dream.png'
+picture-uri-dark='file:///usr/share/backgrounds/rwandaos/dream.png'
+picture-options='zoom'

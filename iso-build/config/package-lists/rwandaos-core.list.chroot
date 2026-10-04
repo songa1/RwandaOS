@@ -1,0 +1,5 @@
+gnome-shell
+gnome-control-center
+dconf-cli
+dconf-gsettings-backend
+fontconfig

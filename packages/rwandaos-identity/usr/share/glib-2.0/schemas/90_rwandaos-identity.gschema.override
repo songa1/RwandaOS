@@ -1,0 +1,7 @@
+[org.gnome.desktop.background]
+picture-uri='file:///usr/share/backgrounds/rwandaos/default.jpg'
+picture-uri-dark='file:///usr/share/backgrounds/rwandaos/default.jpg'
+picture-option='zoom'
+
+[org.gnome.desktop.interface]
+color-scheme='prefer-dark'
