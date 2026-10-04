@@ -1,159 +1,207 @@
+# RwandaOS
 
-RwandaOS – Group Meeting Report
-Custom Debian-based Linux Distribution
-Technical Planning and Team Action Plan
+A customized Debian-based Linux distribution for students, with a Rwandan
+identity: official flag colors, RwandaOS logo, custom boot splash, and the
+Google Sans UI font.
 
-## Implementation Status (current)
+| Component | Version |
+| :--- | :--- |
+| Base OS | Debian 13 (trixie) |
+| Desktop | GNOME 48 |
+| Architecture | x86_64 (amd64) |
+| Image type | live ISO (`iso-hybrid`) |
 
-Base: Debian 13 (trixie), GNOME 48, x86_64
+<p align="center">
+  <img src="branding/logo/RwandaOS.png" alt="RwandaOS logo" width="180" />
+</p>
 
-### What is branded / configured
+<p align="center">
+  <img src="branding/wallpapers/dream.png" alt="RwandaOS Dream wallpaper" width="320" />
+  <img src="branding/wallpapers/wildlife.png" alt="RwandaOS Wildlife wallpaper" width="320" />
+</p>
 
-- ISO metadata: `LB_ISO_APPLICATION`, publisher, volume, hostname
-- Boot parameters: `boot=live components quiet splash hostname=rwandaos username=rwanda`
-- Plymouth boot splash: custom `rwandaos` script theme (logo + progress bar)
-- Bootloader splash screens: isolinux `splash.png` (640×480) + GRUB `splash.png` (800×600)
-- GDM login: Rwandan wallpaper, logo, "RwandaOS" banner, dark colour scheme
-- Desktop: dark mode by default, Google Sans UI font, RwandaOS icon theme (Adwaita-inherit)
-- Accent colour: Rwanda Blue (#00A1DE) via gsettings override + GTK4 accent override in /etc/skel
-- Wallpapers: selectable in Settings (RwandaOS Dream, RwandaOS Wildlife); dark uses Wildlife
-- OS identity: `/usr/lib/os-release` renamed to RwandaOS, `/etc/issue`, hostname `rwandaos`
-- Live session: live-config user "rwanda", hostname rwandaos, autologin
+---
 
-### Build
+## Branded / Configured
 
-```sh
+| Area | Detail |
+| :--- | :--- |
+| Boot splash (live system) | Custom Plymouth `rwandaos` script theme (logo + progress bar) |
+| Live boot menu (ISO) | isolinux `splash.png` (640×480) + GRUB `splash.png` (800×600), title "RwandaOS" |
+| Login (GDM) | Rwandan wallpaper, logo, "RwandaOS" banner, dark color scheme |
+| Desktop theme | Dark mode by default, Google Sans UI font, RwandaOS icon theme (Adwaita-inherit) |
+| Accent color | Rwanda Blue `#00A1DE` (gsettings override + GTK4 override in `/etc/skel`) |
+| Wallpapers | Selectable in Settings: *RwandaOS Dream* (light) / *RwandaOS Wildlife* (dark) |
+| OS identity | `/usr/lib/os-release` set to RwandaOS, `/etc/issue`, hostname `rwandaos` |
+| Live session | live-config user `rwanda`, hostname `rwandaos`, autologin |
+| ISO metadata | `LB_ISO_APPLICATION=RwandaOS`, volume `RwandaOS`, label `RWANDAO` |
+
+---
+
+## Quick Start
+
+**Build host:** Debian 13 (trixie), x86_64. Do **not** build on Kali.
+
+```bash
 sudo ./scripts/setup-build-host.sh   # installs live-build, debootstrap, etc.
-./scripts/build-iso.sh               # cleans, configs, builds the ISO
+./scripts/build-iso.sh               # cleans, configures, builds the ISO
 ```
 
-Output: `iso-build/live-image-amd64.hybrid.iso` (name may be `rwandaos-amd64.hybrid.iso` depending on live-build version).
+Output: `iso-build/rwandaos-amd64.hybrid.iso`
 
-### Repo layout
+> `lb clean` wipes the `.build/` stage markers. `scripts/build-iso.sh`
+> recreates `.build/config` after cleaning so a hand-written `config/`
+> tree works with `lb build`. If you build manually, run
+> `sudo mkdir -p .build && sudo touch .build/config` before `sudo lb build`.
+
+---
+
+## Repository Layout
 
 ```
-branding/      logo, wallpapers, fonts, colors.md
-docs/          design notes
-fonts/         Google Sans TTFs (canonical copy)
-iso-build/     live-build configuration (config/) + hooks + package lists
-packages/      rwandaos-identity Debian package source (gschema override)
-scripts/       generate-assets.sh, build-iso.sh, setup-build-host.sh
+rwandaos/
+├── README.md
+├── branding/
+│   ├── colors.md          # official Rwanda palette (hex values)
+│   ├── logo/RwandaOS.png  # 2000×2000 source logo
+│   ├── wallpapers/        # dream.png, wildlife.png
+│   └── fonts/             # Google Sans (duplicate of /fonts)
+├── docs/
+│   └── desktop-design.md
+├── fonts/                 # canonical Google Sans TTFs + OFL.txt
+├── iso-build/
+│   ├── config/
+│   │   ├── common, chroot, bootstrap, binary, source
+│   │   ├── hooks/normal/  # dconf, os-release, plymouth
+│   │   ├── includes.chroot_after_packages/   # themes, dconf, gdm, plymouth…
+│   │   ├── includes.chroot_before_packages/  # etc/hostname
+│   │   ├── bootloaders/   # isolinux + grub-pc splash + theme
+│   │   └── package-lists/ # live.list.chroot, rwandaos*.list.chroot
+├── packages/
+│   └── rwandaos-identity/ # future .deb source (gschema override)
+└── scripts/
+    ├── setup-build-host.sh
+    ├── build-iso.sh
+    └── generate-assets.sh # regenerate icons/splash/plymouth images
 ```
 
-### Notes / known limitations
+---
 
-- Sounds and audio branding are intentionally skipped for now (stock PipeWire/PulseAudio).
-- Google Sans is the UI font; the system still ships DejaVu as fallback.
-- The `rwandaos-identity` package is not yet wired into the ISO build; the gschema override is duplicated into `iso-build/config/includes.chroot_after_packages/usr/share/glib-2.0/schemas/` on purpose so `dconf update` + `glib-compile-schemas` pick it up during `lb build`.
-- GTK4 accent override lives in `/etc/skel/.config/gtk-4.0/gtk.css`; libadwaita apps pick it up in the live session.
+## Asset Regeneration
 
-1. Project Overview
-   RwandaOS is a proposed customized Linux distribution designed around the needs of students. The team agreed to use Debian as the underlying operating system and GNOME as the initial desktop environment. The project will combine the stability and flexibility of Debian with a distinct Rwandan identity, including custom branding, colors, sounds, wallpapers, animations, and student-focused software.
-2. Initial Project Vision
-   Base operating system: Debian.
-   Desktop environment: GNOME.
-   Target audience: Students.
-   Project identity: A modern, lightweight and accessible operating system with a Rwandan-inspired identity.
-   Visual identity: Rwandan-inspired colors, logo, wallpapers, icons and animations.
-   Audio identity: Custom sounds inspired by Rwanda.
-   User experience: A clean desktop with useful tools and applications prepared for students.
-   Technical direction: Customize and package existing open-source components rather than writing an operating system kernel from scratch.
-3. Proposed Student-Focused Features
-   The team discussed providing useful tools and applications for students, potentially including:
-   A document/PDF reading application.
-   Web browser.
-   Power and battery management tools.
-   Advanced calculator.
-   Other academic and productivity applications identified during research.
-   The final software list will be decided after the team researches student needs and confirms which applications are appropriate, open source, stable and compatible with Debian.
-4. Technical Direction
-   The team will build RwandaOS as a customized Debian-based distribution. The first implementation should focus on creating a reproducible Debian + GNOME environment before adding extensive customization.
-   Proposed architecture:
-   RwandaOS identity and customization
-   RwandaOS applications and configuration
-   GNOME desktop environment
-   Debian packages and system components
-   Linux kernel
-5. Technical Roadmap
-   Development Environment
-   Set up a safe development environment using a virtual machine.
-   Install Debian with GNOME.
-   Become familiar with the Debian filesystem structure.
-   Practice using the Linux terminal.
-   Learn essential Bash commands and basic Bash scripting.
-   Install Git and learn the team's Git workflow.
-   Base System Research
-   Research the Debian architecture and major system components.
-   Understand how Debian packages are installed, configured and updated.
-   Research how GNOME is configured and customized.
-   Study how a Debian-based live ISO is built.
-   Identify appropriate open-source tools for building the RwandaOS ISO.
-   First Technical Prototype
-   Create a clean Debian + GNOME installation.
-   Verify networking, audio, display, storage and basic hardware support.
-   Create a baseline snapshot so future changes can be compared against a known working system.
-   Document every important configuration change.
-   RwandaOS Identity
-   Finalize the RwandaOS logo.
-   Define the official color palette.
-   Design wallpapers and desktop backgrounds.
-   Design icons and other visual assets.
-   Design boot and login animations.
-   Research how GNOME themes, GTK themes and window decorations can be customized.
-   Create and test the RwandaOS theme.
-   Sound Identity
-   Define the desired sound identity for RwandaOS.
-   Create or source appropriate Rwandan-inspired audio assets with permission and suitable licensing.
-   Prepare startup, notification, error and other system sounds where technically appropriate.
-   Test sound files for quality, length and usability.
-   Integrate the sounds into the system configuration.
-   Student Software
-   Research and agree on the essential applications for students.
-   Check Debian compatibility and licensing.
-   Test applications in the clean Debian + GNOME environment.
-   Configure default applications and file associations.
-   Remove unnecessary software where appropriate.
-   Automation and Packaging
-   Write scripts to install RwandaOS packages and configurations.
-   Package custom themes, sounds, icons and applications where appropriate as Debian packages.
-   Make the customization process reproducible.
-   Document the build process so another team member can reproduce it.
-   ISO Development
-   Build the first RwandaOS ISO from the documented configuration.
-   Add RwandaOS branding and selected software.
-   Test the ISO in a virtual machine.
-   Verify that the ISO boots and installs correctly.
-   Keep versioned builds such as RwandaOS 0.1.
-   Testing and Improvement
-   Test on different virtual machine configurations.
-   Test on older and lower-specification computers where available.
-   Test installation, networking, audio, graphics, USB, applications and updates.
-   Record bugs and improvements.
-   Fix critical issues before public release.
-6. Immediate Team Tasks Before the Next Meeting
-   Each team member should complete their assigned preparation before the next meeting. The purpose is to ensure that the next meeting can focus on implementation rather than basic orientation.
-   Git Repository: Create the team's central Git repository for RwandaOS. Establish a clear folder structure, README, contribution rules and basic branching/version-control workflow.
-   Debian Source and Installation Resources: Find the official Debian source-code resources and official installation/live-image resources that the team will use. Record the relevant official documentation and explain what each resource is used for.
-   RwandaOS Logo and Animation: Design initial concepts for the RwandaOS logo, visual identity and boot/login animations. Prepare files that can later be integrated into the operating system.
-   Technical Roadmap Research: Research the complete technical process for creating a customized Debian-based distribution with GNOME, from a clean Debian installation through customization, packaging, ISO generation and testing.
-   Linux Terminal and Bash: Every member should practice essential Linux terminal commands and understand basic Bash usage, including navigation, file operations, permissions, package management and simple scripting.
-   Debian Filesystem: Every member should study the Debian/Linux filesystem and understand the purpose of important directories such as /, /home, /etc, /usr, /var, /opt, /tmp, /boot and /dev.
-   GNOME Customization: Research how GNOME themes, panels, menus, icons, wallpapers, window decorations and related settings can be customized.
-   Student Applications: Research applications that would be genuinely useful for students and propose a short list, including the reason for each application and its licensing/availability status.
-7. Team Learning Requirements
-   Before technical implementation begins, every team member should be able to:
-   Open and navigate a Linux terminal.
-   Create, copy, move, rename and delete files and directories using terminal commands.
-   Understand absolute and relative paths.
-   Use basic Bash commands and command options.
-   Understand file ownership and permissions.
-   Install, remove and update Debian packages using the package manager.
-   Understand the basic Debian filesystem.
-   Use Git to clone, commit, pull and push changes.
-   Explain the basic relationship between Debian, GNOME, applications and the Linux kernel.
-   Follow the team's documented build and testing process.
-8. Suggested Git Repository Structure
-   The team can begin with a simple structure and expand it as the project becomes more mature:
+Re-render the derived assets (icons, boot splashes, Plymouth images) from
+`branding/logo/RwandaOS.png`:
+
+```bash
+./scripts/generate-assets.sh
+```
+
+Requires Pillow, ImageMagick, and rsvg-convert.
+
+---
+
+## Known Limitations
+
+- **Sounds are skipped** for now (stock PipeWire/PulseAudio).
+- Google Sans ships the UI; DejaVu remains as the fallback/system font.
+- The `rwandaos-identity` Debian package is **not yet wired into the ISO
+  build**. The same gschema override is duplicated into
+  `config/includes.chroot_after_packages/usr/share/glib-2.0/schemas/`
+  so `dconf update` + `glib-compile-schemas` pick it up during `lb build`.
+- The GTK4 accent override lives in `/etc/skel/.config/gtk-4.0/gtk.css`;
+  libadwaita apps pick it up in the live session.
+- GTK3 apps (`gnome-terminal`) use a minimal theme at
+  `usr/share/themes/RwandaOS/gtk-3.0/`; accents are not re-themed there.
+
+---
+
+## Project Background (original meeting report)
+
+<details>
+<summary>Expand original planning notes</summary>
+
+1. **Project Overview**
+
+   RwandaOS is a proposed customized Linux distribution designed around the needs of students. The team agreed to use Debian as the underlying operating system and GNOME as the initial desktop environment. The project combines the stability and flexibility of Debian with a distinct Rwandan identity: custom branding, colors, sounds, wallpapers, animations, and student-focused software.
+
+2. **Initial Project Vision**
+
+   - **Base OS:** Debian
+   - **Desktop:** GNOME
+   - **Target audience:** Students
+   - **Identity:** Modern, lightweight, accessible, Rwandan-inspired
+   - **Visual identity:** Rwandan colors, logo, wallpapers, icons, animations
+   - **Audio identity:** Custom sounds inspired by Rwanda
+   - **UX:** Clean desktop with useful tools prepared for students
+   - **Technical direction:** Customize and package existing open-source components rather than writing a kernel from scratch
+
+3. **Proposed Student-Focused Features**
+
+   - Document/PDF reading application
+   - Web browser
+   - Power and battery management tools
+   - Advanced calculator
+   - Other academic and productivity applications identified during research
+
+   The final software list is decided after research confirms appropriate, open-source, stable, Debian-compatible applications.
+
+4. **Technical Direction**
+
+   RwandaOS is built as a customized Debian-based distribution. The first implementation focuses on a reproducible Debian + GNOME environment before extensive customization.
+
+   Proposed architecture (top → bottom):
+
+   1. RwandaOS identity and customization
+   2. RwandaOS applications and configuration
+   3. GNOME desktop environment
+   4. Debian packages and system components
+   5. Linux kernel
+
+5. **Technical Roadmap**
+
+   | Phase | Tasks |
+   | :--- | :--- |
+   | **Development Environment** | VM, install Debian+GNOME, learn filesystem, terminal, Bash, Git |
+   | **Base System Research** | Debian architecture, packaging, GNOME config, live ISO, build tools |
+   | **First Technical Prototype** | Clean Debian+GNOME snapshot, verify network/audio/display/storage, document changes |
+   | **RwandaOS Identity** | Finalize logo, palette, wallpapers, icons, animations, GNOME/GTK theme |
+   | **Sound Identity** | Define sound identity, source/create assets, integrate sounds |
+   | **Student Software** | Research apps, check Debian compatibility/licensing, set defaults |
+   | **Automation and Packaging** | Install/config scripts, package themes/icons/apps, reproducible builds |
+   | **ISO Development** | First RwandaOS ISO, branding + software, VM testing, versioned builds (0.1) |
+   | **Testing and Improvement** | Multiple VM configs, older hardware, network/audio/graphics/USB/app/update tests, bug log |
+
+6. **Immediate Team Tasks**
+
+   Every member prepares before the next meeting:
+
+   - **Git Repository:** Set up central repo, folder structure, README, contribution rules, branching.
+   - **Debian Resources:** Find official Debian source & live-image resources; record purpose of each.
+   - **Logo and Animation:** Initial concepts for logo, visual identity, boot/login animations.
+   - **Technical Roadmap Research:** End-to-end process: clean install → customization → packaging → ISO → testing.
+   - **Linux Terminal and Bash:** Practice navigation, file ops, permissions, package management, scripting.
+   - **Debian Filesystem:** Understand `/`, `/home`, `/etc`, `/usr`, `/var`, `/opt`, `/tmp`, `/boot`, `/dev`.
+   - **GNOME Customization:** Themes, panels, menus, icons, wallpapers, window decorations.
+   - **Student Applications:** Short list with reason, licensing, availability.
+
+7. **Team Learning Requirements**
+
+   Before technical implementation begins, each member should be able to:
+
+   - Open and navigate a Linux terminal
+   - Create, copy, move, rename, delete files/directories
+   - Use absolute and relative paths
+   - Use basic Bash commands and options
+   - Understand file ownership and permissions
+   - Install, remove, update Debian packages
+   - Understand the basic Debian filesystem
+   - Use Git to clone, commit, pull, push
+   - Explain Debian / GNOME / kernel relationship
+   - Follow the documented build and testing process
+
+8. **Suggested Git Repository Structure**
+
+   ```
    rwandaos/
    ├── README.md
    ├── docs/
@@ -173,10 +221,18 @@ scripts/       generate-assets.sh, build-iso.sh, setup-build-host.sh
    ├── applications/
    ├── iso/
    └── tests/
-9. Expected Outcome of the Next Meeting
-   By the next meeting, the team should have a shared Git repository, access to the required Debian resources, initial branding concepts, and enough technical research to begin implementation. Every member should also have basic confidence with the Linux terminal, Bash commands, Debian filesystem and Git.
-   The meeting should then move from planning into practical work: setting up the development environment, creating the clean Debian + GNOME baseline, establishing the project repository structure, and beginning the first RwandaOS customization.
-10. Team Working Principle
-    The project should be developed incrementally. The team should avoid changing many components at the same time. Each major change should be documented, tested and committed to Git. This will make it easier to identify problems, return to a working version and eventually reproduce the complete RwandaOS build.
-11. Conclusion
-    The team has established the initial direction for RwandaOS: a Debian-based Linux distribution using GNOME, designed primarily for students and distinguished by a Rwandan-inspired visual and audio identity. The immediate priority is preparation. Each member must understand the core Linux tools and research the technical build process so that the next meeting can begin hands-on implementation.
+   ```
+
+9. **Expected Outcome of the Next Meeting**
+
+   A shared Git repository, required Debian resources, initial branding concepts, and enough technical research to begin implementation. The meeting moves into practical work: development environment, clean baseline, repository structure, first customization.
+
+10. **Team Working Principle**
+
+    Develop incrementally. Avoid changing many components at once. Document, test, and commit every major change. Identifying problems, returning to working versions, and reproducing the build must be easy.
+
+11. **Conclusion**
+
+    RwandaOS's initial direction is set: a Debian-based Linux distribution using GNOME, designed primarily for students, distinguished by a Rwandan-inspired visual and audio identity. Immediate priority is preparation. Every member needs basic confidence with core Linux tools and the build process before implementation.
+
+</details>
