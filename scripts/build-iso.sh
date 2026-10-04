@@ -7,4 +7,8 @@ if [ "$(. /etc/os-release && echo "$ID")" != "debian" ]; then
 fi
 cd "$ROOT/iso-build"
 sudo lb clean
+# lb clean wipes .build/ stagefiles; recreate the config stagefile since
+# our config/ tree is maintained manually (we don't re-run lb config).
+sudo mkdir -p .build
+sudo touch .build/config
 sudo lb build
