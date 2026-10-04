@@ -21,4 +21,3 @@ High contrast white/dark
 Design principle:
 Use Rwanda colors as accents rather than covering the entire interface
 with national flag colors.
-
