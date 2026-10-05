@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+cd /tmp
+if [ ! -d MacTahoe-gtk-theme ]; then
+    git clone --depth=1 https://github.com/vinceliuice/MacTahoe-gtk-theme.git
+fi
+cd MacTahoe-gtk-theme
+./install.sh -d /usr/share/themes -t default -c dark --shell -i debian
+./install.sh -d /usr/share/themes -t default -c light --shell -i debian
+./install.sh -l -c dark
+cp -r /root/.config/gtk-4.0/* /etc/skel/.config/gtk-4.0/ || true
+cd /tmp
+if [ ! -d MacTahoe-icon-theme ]; then
+    git clone --depth=1 https://github.com/vinceliuice/MacTahoe-icon-theme.git
+fi
+cd MacTahoe-icon-theme
+./install.sh -d /usr/share/icons -t blue
+cd /
+rm -rf /tmp/MacTahoe-gtk-theme /tmp/MacTahoe-icon-theme

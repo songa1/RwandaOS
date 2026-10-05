@@ -16,6 +16,8 @@ secondary-color='#0b1b34'
 color-scheme='prefer-dark'
 accent-color='blue'
 font-name='Google Sans 11'
+gtk-theme='MacTahoe-Dark'
+gtk-icon-theme-name='MacTahoe'
 
 [org/gnome/desktop/a11y]
 always-show-universal-access-status=false

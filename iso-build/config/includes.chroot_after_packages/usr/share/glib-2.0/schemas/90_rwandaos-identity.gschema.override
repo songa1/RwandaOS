@@ -5,8 +5,9 @@ picture-options='zoom'
 
 [org.gnome.desktop.interface]
 color-scheme='prefer-dark'
+gtk-theme='MacTahoe-Dark'
 font-name='Google Sans 11'
 document-font-name='Google Sans 11'
 monospace-font-name='DejaVu Sans Mono 11'
-gtk-icon-theme-name='RwandaOS'
+gtk-icon-theme-name='MacTahoe'
 accent-color='blue'

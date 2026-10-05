@@ -7,3 +7,7 @@ fontconfig
 plymouth
 gdm3
 xdg-user-dirs
+gnome-shell-extension-dash-to-dock
+gnome-shell-extension-blur-my-shell
+git
+imagemagick
