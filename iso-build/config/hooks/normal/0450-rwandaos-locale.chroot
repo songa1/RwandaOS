@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+sed -i '/^# rw_RW/s/^# //' /etc/locale.gen || true
+grep -q '^rw_RW.UTF-8 UTF-8' /etc/locale.gen || echo 'rw_RW.UTF-8 UTF-8' >> /etc/locale.gen
+locale-gen
+echo 'LANG=rw_RW.UTF-8' > /etc/default/locale
