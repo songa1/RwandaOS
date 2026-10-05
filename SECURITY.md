@@ -7,7 +7,7 @@ build tooling, or branding assets), please do **not** open a public issue.
 
 Contact:
 
-- Email: achille@techinika.com (replace with the project's real contact)
+- Email: achille@techinika.com
 - Or open a private security advisory on GitHub once published
 
 ## Scope
